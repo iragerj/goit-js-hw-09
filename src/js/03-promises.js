@@ -27,9 +27,9 @@ function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (shouldResolve) {
-        return resolve(position, delay);
+        return resolve({ position, delay });
       } else {
-        return reject(position, delay);
+        return reject({ position, delay });
       }
     }, delay);
   });

@@ -19,20 +19,27 @@ const timer = {
   countdown: 0,
   startTime: null,
   start() {
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       const currentTime = Date.now();
       this.countdown = this.startTime - currentTime;
       this.updateHTML();
+      if (this.countdown < 1000) {
+        clearInterval(intervalId);
+      }
     }, 1000);
   },
   updateHTML() {
     const dateObject = convertMs(this.countdown);
-    days.textContent = dateObject.days;
-    hours.textContent = dateObject.hours;
-    minutes.textContent = dateObject.minutes;
-    seconds.textContent = dateObject.seconds;
+    days.textContent = addLeadingZero(dateObject.days);
+    hours.textContent = addLeadingZero(dateObject.hours);
+    minutes.textContent = addLeadingZero(dateObject.minutes);
+    seconds.textContent = addLeadingZero(dateObject.seconds);
   },
 };
+
+function addLeadingZero(number) {
+  return number.toString().padStart(2, '0');
+}
 
 flatpickr(calendar, options);
 
@@ -42,6 +49,7 @@ startBtn.addEventListener('click', onStart);
 
 function onStart() {
   startBtn.disabled = true;
+  calendar.disabled = true;
   timer.start();
 }
 
@@ -52,6 +60,7 @@ function onClose(selectedDates) {
     window.alert('Please choose a date in the future');
   } else {
     startBtn.disabled = false;
+    calendar.disabled = false;
   }
 }
 
